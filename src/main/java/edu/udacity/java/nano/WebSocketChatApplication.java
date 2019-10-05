@@ -1,5 +1,6 @@
 package edu.udacity.java.nano;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
@@ -31,6 +33,14 @@ public class WebSocketChatApplication {
     @GetMapping("/index")
     public ModelAndView index(String username, HttpServletRequest request) throws UnknownHostException {
         //TODO: add code for login to chatroom.
-        return null;
+        ModelAndView mv = new ModelAndView("/chat");
+        if( "".equalsIgnoreCase(username)){
+            username = "John Doe";
+        }
+
+        mv.addObject("username", username);
+        // TODO: To return Route = "ws://localhost:8080/chat"
+        mv.addObject("url","ws://" + InetAddress.getLocalHost().getHostName() + ":" +request.getServerPort()+request.getContextPath() + "/chat");
+        return mv;
     }
 }
