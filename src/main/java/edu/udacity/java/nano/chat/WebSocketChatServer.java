@@ -16,19 +16,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 @Component
-@ServerEndpoint("/chat")
+@ServerEndpoint("/chat/{username}")
 public class WebSocketChatServer {
-
-    private String integerToString(int i){
-        return Integer.toString(i);
-    }
 
     /**
      * All chat sessions.
      */
     private static Map<String, Session> onlineSessions = new ConcurrentHashMap<>();
 
-    private static void sendMessageToAll(String msg) {
+        private static void sendMessageToAll(String msg) {
         //TODO: add send message method.
         onlineSessions.forEach((id, session) -> {
             try{
@@ -46,7 +42,7 @@ public class WebSocketChatServer {
     public void onOpen(Session session) {
         //TODO: add on open connection.
         onlineSessions.put(session.getId(), session);
-        sendMessageToAll(JSON.toJSONString(new Message("ENTER", "","ENTER", integerToString(onlineSessions.size()))));
+        sendMessageToAll(JSON.toJSONString(new Message("ENTER", "", "ENTER", Integer.toString(onlineSessions.size()))));
     }
 
     /**
@@ -56,7 +52,7 @@ public class WebSocketChatServer {
     public void onMessage(Session session, String jsonStr) {
         //TODO: add send message.
         Message message = JSON.parseObject(jsonStr, Message.class);
-        sendMessageToAll(JSON.toJSONString(new Message(message.getMessage(), message.getUsername(),"CHAT", integerToString(onlineSessions.size()))));
+        sendMessageToAll(JSON.toJSONString(new Message(message.getMessage(), message.getUsername(), "SPEAK", Integer.toString(onlineSessions.size()))));
     }
 
     /**
@@ -66,7 +62,7 @@ public class WebSocketChatServer {
     public void onClose(Session session) {
         //TODO: add close connection.
         onlineSessions.remove(session.getId());
-        sendMessageToAll(JSON.toJSONString(new Message("LEAVE THE CONV", "Leave","LEAVE", integerToString(onlineSessions.size()))));
+        sendMessageToAll(JSON.toJSONString(new Message("LEAVE", "", "LEAVE", Integer.toString(onlineSessions.size()))));
     }
 
     /**

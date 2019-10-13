@@ -13,7 +13,7 @@
     <div class="mdui-toolbar mdui-color-theme">
         <span class="mdui-typo-title">Chat Room</span>
         <div class="mdui-toolbar-spacer"></div>
-        <a class="mdui-btn mdui-btn-icon" th:href="@{/}">
+        <a id="exit-app" class="mdui-btn mdui-btn-icon" th:href="@{/}">
             <i class="mdui-icon material-icons">exit_to_app</i>
         </a>
     </div>
@@ -82,8 +82,11 @@
         /**
          * WebSocket client PS：URL shows WebSocket protocal, port number, and then end point.
          */
-        var webSocket = new WebSocket(/*[[${webSocketUrl}]]*/ 'ws://localhost:8080/chat');
+<!--        var webSocket = new WebSocket(/*[[${webSocketUrl}]]*/ 'ws://localhost:8080/chat');-->
+        var username =/*[[${username}]]*/;
+        var webSocket = new WebSocket('ws://localhost:8080/chat/' + username);
         /**
+
          * websocket open connection.
          */
         webSocket.onopen = function (event) {
