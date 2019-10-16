@@ -1,6 +1,7 @@
 package edu.udacity.java.nano.chat;
 
 import com.alibaba.fastjson.JSON;
+import edu.udacity.java.nano.model.Message;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
@@ -51,9 +52,7 @@ public class WebSocketChatServer {
     @OnMessage
     public void onMessage(Session session, String jsonStr) {
         //TODO: add send message.
-        System.out.println(jsonStr);
         Message message = JSON.parseObject(jsonStr, Message.class);
-        System.out.println(message.toString());
         sendMessageToAll(JSON.toJSONString(new Message(message.getMessage(), message.getUsername(), "SPEAK", Integer.toString(onlineSessions.size()))));
     }
 
